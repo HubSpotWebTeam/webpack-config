@@ -1,0 +1,43 @@
+{
+  "name": "@hs-web-team/webpack-config",
+  "version": "1.0.0",
+  "description": "A shared webpack configuration for HubSpot CMS projects ",
+  "main": "src/index.ts",
+  "files": [
+    "*.md",
+    "dist",
+    "lib"
+  ],
+  "engines": {
+    "node": ">=14"
+  },
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build": "npm run clean && tsc -p ./tsconfig.json",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "eslint": "eslint -c .eslintrc './src/**/*.{ts,tsx,js,jsx}'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HubSpotWebTeam/webpack-config.git"
+  },
+  "author": "HubSpot Marketing Web Team",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HubSpotWebTeam/webpack-config/issues"
+  },
+  "homepage": "https://github.com/HubSpotWebTeam/webpack-config#readme",
+  "devDependencies": {
+    "@hs-web-team/eslint-config-node": "^0.2.1",
+    "@hs-web-team/eslint-config-ts": "^0.2.3",
+    "@typescript-eslint/eslint-plugin": "^5.38.1",
+    "@typescript-eslint/parser": "^5.38.1",
+    "eslint-plugin-jsdoc": "^39.3.6",
+    "typescript": "^4.9.4",
+    "webpack": "^5.74.0"
+  },
+  "peerDependencies": {
+    "cross-env": "^7.0.3",
+    "webpack": "^5.74.0"
+  }
+}
