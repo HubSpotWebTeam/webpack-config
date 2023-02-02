@@ -3,8 +3,10 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HubSpotAutoUploadPlugin = require('@hubspot/webpack-cms-plugins/HubSpotAutoUploadPlugin');
 const path = require('path');
 
+// TODO
+
 /**
- * This is the webpack config for React applications.
+ * This is the webpack config for standard CMS pages.
  *
  * @param {string} portal - The portal ID to upload to
  * @param {boolean} autoupload - Whether or not to upload automatically
