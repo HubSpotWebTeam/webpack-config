@@ -1,29 +1,67 @@
+const glob = require('glob');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HubSpotAutoUploadPlugin = require('@hubspot/webpack-cms-plugins/HubSpotAutoUploadPlugin');
-const path = require('path');
-
-// TODO
 
 /**
- * This is the webpack config for standard CMS pages.
+ * This is the webpack config for CMS applications.
  *
  * @param {string} portal - The portal ID to upload to
  * @param {boolean} autoupload - Whether or not to upload automatically
+ * @param {string} [cmsSrc=dist] - The source folder that will be uploaded to your target portal
+ * @param {string} [cmsDest=website] - The destination folder in your target portal to upload the src contents to
  * @returns {object} - The webpack config
  */
 
+const moduleEntries = (projectFolder) => glob.sync(`${projectFolder}/src/modules/**.module/module.{js,scss}`)
+  .reduce((acc, item) => {
+    const name = item
+      .replace(`${projectFolder}/src/modules/`, '')
+      .replace('.module/', '.module')
+      .replace('module.js', '')
+      .replace('module.scss', '');
+
+    if (!acc[name]) {
+      acc[name] = [];
+    }
+
+    acc[name].push(item);
+
+    return acc;
+  }, []);
+
+const assetEntries = (projectFolder) => glob.sync(`${projectFolder}/src/assets/**/*.{js,scss}`)
+  .reduce((acc, item) => {
+    const name = item.replace(`${projectFolder}/src/assets/`, '').replace(/\.[^/.]+$/, '');
+
+    if (!acc[name]) {
+      acc[name] = [];
+    }
+
+    acc[name].push(item);
+
+    return acc;
+  }, []);
+
+const outputFileName = pathData => pathData.chunk.name.includes('.module')
+  ? 'modules/[name]/module.js'
+  : 'assets/[name].js';
+
 const config = ({
+  projectFolder,
   portal,
   autoupload = false,
+  cmsSrc = 'dist',
+  cmsDest = 'website',
 }) => ({
   target: 'web',
   entry: {
-    main: './src/index.js',
+    ...moduleEntries(projectFolder),
+    ...assetEntries(projectFolder),
   },
   output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: '[name].js',
+    path: `${projectFolder}/dist`,
+    filename: outputFileName,
   },
   optimization: {
     minimize: false,
@@ -39,14 +77,7 @@ const config = ({
       },
       {
         test: /\.s[ac]ss$/i,
-        use: [
-          MiniCssExtractPlugin.loader,
-          { loader: 'css-loader', options: { url: false } },
-          {
-            loader: 'postcss-loader',
-          },
-          'sass-loader',
-        ],
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
       },
       {
         test: /\.(svg)$/,
@@ -62,21 +93,31 @@ const config = ({
     new HubSpotAutoUploadPlugin({
       portal,
       autoupload,
-      src: 'dist',
-      dest: 'website',
+      src: cmsSrc,
+      dest: cmsDest,
     }),
     new MiniCssExtractPlugin({
-      filename: '[name].css',
+      filename: pathData => outputFileName(pathData).replace('.js', '.css'),
     }),
     new CopyWebpackPlugin({
       patterns: [
         {
-          from: 'src/assets',
-          to: 'assets',
+          from: `${projectFolder}/src/templates`,
+          to: 'templates',
+          noErrorOnMissing: true,
         },
         {
-          from: 'src/modules',
-          to: 'modules',
+          from: `${projectFolder}/src/assets/**/*.{html,json}`,
+          to: 'assets/[name][ext]',
+          noErrorOnMissing: true,
+        },
+        {
+          from: `${projectFolder}/src/modules/**/*.{html,json}`,
+          to: ({ absoluteFilename }) => {
+            const parentFolder = absoluteFilename.split('/').slice(-2)[0];
+            return `modules/${parentFolder}/[name][ext]`;
+          },
+          noErrorOnMissing: true,
         },
       ],
     }),

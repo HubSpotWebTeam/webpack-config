@@ -13,12 +13,11 @@ npm install --save-dev @hs-web-team/webpack-config
 Depending on the type of project you are creating, you will need to use a different configuration. The following configurations are available:
 
 * Hubspot CMS - `cmsConfig`
-* React Application - `reactConfig`
 
 To use the configuration, import it from the package:
 
 ```js
-const { cmsConfig, reactConfig } = require('@hs-web-team/webpack-config');
+const { cmsConfig } = require('@hs-web-team/webpack-config');
 ```
 
 You can use these configurations directly in your Webpack configuration file:
