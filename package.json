@@ -1,12 +1,11 @@
 {
   "name": "@hs-web-team/webpack-config",
   "version": "1.0.0",
-  "description": "A shared webpack configuration for HubSpot CMS projects ",
-  "main": "src/index.ts",
+  "description": "A shared webpack configuration for HubSpot CMS projects",
+  "main": "dist/index.js",
   "files": [
     "*.md",
-    "dist",
-    "lib"
+    "dist/"
   ],
   "engines": {
     "node": ">=14"
@@ -32,6 +31,7 @@
     "@hs-web-team/eslint-config-ts": "^0.2.3",
     "@typescript-eslint/eslint-plugin": "^5.38.1",
     "@typescript-eslint/parser": "^5.38.1",
+    "css-loader": "^6.7.3",
     "eslint-plugin-jsdoc": "^39.3.6",
     "typescript": "^4.9.4",
     "webpack": "^5.74.0"
@@ -39,5 +39,13 @@
   "peerDependencies": {
     "cross-env": "^7.0.3",
     "webpack": "^5.74.0"
+  },
+  "dependencies": {
+    "@hubspot/webpack-cms-plugins": "^4.1.6",
+    "babel-loader": "^9.1.2",
+    "copy-webpack-plugin": "^11.0.0",
+    "glob": "^8.1.0",
+    "mini-css-extract-plugin": "^2.7.2",
+    "postcss-loader": "^7.0.2"
   }
 }
