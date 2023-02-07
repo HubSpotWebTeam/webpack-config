@@ -1,6 +1,6 @@
 {
   "name": "@hs-web-team/webpack-config",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A shared webpack configuration for HubSpot CMS projects",
   "main": "dist/index.js",
   "files": [
