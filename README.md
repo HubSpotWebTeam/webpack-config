@@ -1,6 +1,6 @@
 # @hs-web-team/webpack-config
 
-A shared Webpack configuration
+A shared Webpack configuration for Hubspot CMS projects.
 
 ## Installation
 
@@ -10,7 +10,7 @@ npm install --save-dev @hs-web-team/webpack-config
 
 ## Usage
 
-Depending on the type of project you are creating, you will need to use a different configuration. The following configurations are available:
+The following configurations are available:
 
 * Hubspot CMS - `cmsConfig`
 
@@ -35,14 +35,12 @@ You can override any of the values in the configuration by spreading the object 
 
 ```js
 // webpack.config.js
+const { merge } = require('webpack-merge');
 const { cmsConfig } = require('@hs-web-team/webpack-config');
 
-const customWebpackConfig = {
-  ...cmsConfig,
-  entry: {
-    main: './src/main.js',
-  },
-};
+const customWebpackConfig = merge(cmsConfig, {
+  // Your custom configuration
+});
 
 module.exports = customWebpackConfig;
 ```
